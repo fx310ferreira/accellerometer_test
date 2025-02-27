@@ -23,10 +23,10 @@ if (isMobile()) {
             window.addEventListener("devicemotion", (event) => {
               const acc = event.acceleration || { x: 0, y: 0 };
               const currentTime = Date.now();
-              const deltaTime = currentTime - lastTime;
-              speed += acc.y * deltaTime;
+              const deltaTime = (currentTime - lastTime) / 1000;
+              speed += (Math.round(acc.y * 10) / 10) * deltaTime;
               mobile.innerHTML = `Speed: ${speed}
-                <br>Acceleration: ${acc.y} 
+                <br>Acceleration: ${Math.round(acc.y * 10) / 10} 
                 <br>Time: ${deltaTime}`;
               lastTime = currentTime;
             });

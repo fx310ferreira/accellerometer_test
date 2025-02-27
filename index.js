@@ -5,6 +5,7 @@ function isMobile() {
 
 let speed = 0;
 let lastTime = Date.now();
+let filteredAcceleration = { x: 0, y: 0, z: 0 };
 // DeviceMotion listener to control playing/pausing based on movement.
 
 const loading = document.querySelector(".loading");
@@ -23,10 +24,20 @@ if (isMobile()) {
             window.addEventListener("devicemotion", (event) => {
               const acc = event.acceleration || { x: 0, y: 0 };
               const currentTime = Date.now();
+
+              filteredAcceleration.y =
+                acc.y * 0.8 + filteredAcceleration.y * 0.2;
+
               const deltaTime = (currentTime - lastTime) / 1000;
-              speed += (Math.round(acc.y * 10) / 10) * deltaTime;
+              if (Math.abs(filteredAcceleration.y) > 0.2)
+
+                speed +=
+                  (Math.round(filteredAcceleration.y * 10) / 10) * deltaTime;
+
               mobile.innerHTML = `Speed: ${speed}
-                <br>Acceleration: ${Math.round(acc.y * 10) / 10} 
+                <br>Acceleration: ${
+                  Math.round(filteredAcceleration.y * 10) / 10
+                } 
                 <br>Time: ${deltaTime}`;
               lastTime = currentTime;
             });
